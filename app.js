@@ -1,18 +1,19 @@
-// Import ExpressJS express() top level function
 const express = require('express');
-// Import Morgan middleware
 const morgan = require('morgan');
-// Import routes
 const router = require('./routes/routes');
+const dotenv = require('dotenv');
 
 // Instantiate an application instance
 const app = express();
 
-// ******** Configure middleware ********
-// Log HTTP requests -https://github.com/expressjs/morgan#readme
+// ******** Configure Application Instance ********
+// Set path to args file
+dotenv.config({path: './config.env' });
+
+// ******** middleware ********
 app.use(morgan('dev'));
 
-// ******** Configure routes ********
+// ******** routes ********
 app.use('/', router);
 
 // Make app instance avaliable for import
