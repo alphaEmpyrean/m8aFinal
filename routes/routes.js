@@ -7,7 +7,9 @@ const router = express.Router();
 router
     .route('/')
     .get((req, res) => {
+        // Return hello world response
         return res.status(200).send("<p>Hello World!</p>");
     });
 
+// Make app instance avaliable for import
 module.exports = router;
