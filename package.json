@@ -1,0 +1,14 @@
+{
+  "name": "m8afinal",
+  "version": "1.0.0",
+  "description": "This is the final for IFT 458. A loan web application.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Joshua Knippel",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
