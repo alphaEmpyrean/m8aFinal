@@ -7,18 +7,18 @@ exports.createUser = async (req, res) => {
         
         // configure response to successful request
         res.status(201).json({
-          status: 'success',
-          data: {
-            user: newUser
-          }
+            status: 'success',
+            data: {
+                user: newUser
+            }
         });
-      } catch (err) {
+    } catch (err) {
         // configure response to failed request
         res.status(400).json({
-          status: 'fail',
-          message: err
+            status: 'fail',
+            message: err
         });
-      }
+    }
 };
 
 exports.getAllUsers = async (req, res) => {
@@ -42,3 +42,24 @@ exports.getAllUsers = async (req, res) => {
         });
     }
 };
+
+exports.getUserByEmail = async (req, res) => {
+    try {
+        // get a user by their email address
+        const user = await User.findOne( {email: req.url.replace('/', '')} );
+  
+        // configure response to sucessful request
+        res.status(200).json({
+            status: 'success',
+            data: {
+                user
+            }
+        });
+    } catch (err) {
+        // configure response to failed request
+        res.status(404).json({
+            status: 'fail',
+            message: err
+        });
+    }
+  };

@@ -10,5 +10,9 @@ router
     .get(userController.getAllUsers)
     .post(userController.createUser);
 
+router
+    .route(/.*@*.*$/)
+    .get(userController.getUserByEmail);
+
 // Make app instance avaliable for import
 module.exports = router;
