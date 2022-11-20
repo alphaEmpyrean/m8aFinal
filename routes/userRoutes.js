@@ -11,8 +11,9 @@ router
     .post(userController.createUser);
 
 router
-    .route(/.*@*.*$/)
-    .get(userController.getUserByEmail);
+    .route(/.*@*.*$/) // super basic regex to match email addresses
+    .get(userController.getUserByEmail)
+    .patch(userController.updateUserbyEmail);
 
 // Make app instance avaliable for import
 module.exports = router;
