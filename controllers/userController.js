@@ -120,4 +120,4 @@ exports.deleteUserByEmail = async (req, res) => {
         // Configure response to failed request
         res.status(400).json({ status: 'fail', message: err });
     }
-  };
+};

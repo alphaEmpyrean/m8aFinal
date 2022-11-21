@@ -1,7 +1,8 @@
 const express = require('express');
 const morgan = require('morgan');
 const router = require('./routes/routes');
-const userRouter = require('./routes/userRoutes')
+const userRouter = require('./routes/userRoutes');
+const loanRouter = require('./routes/loanRoutes');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 
@@ -28,6 +29,7 @@ app.use(morgan('dev')); // log requests to console
 
 // ******** routes ********
 app.use('/api/v1/users', userRouter);
+app.use('/api/v1/loans', loanRouter);
 app.use('/', router);
 
 module.exports = app;
