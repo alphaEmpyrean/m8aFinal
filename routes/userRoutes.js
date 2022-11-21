@@ -7,7 +7,6 @@ const router = express.Router();
 // Create root route
 router
     .route('')
-    .get(userController.getAllUsers)
     .post(userController.createUser);
 
 router

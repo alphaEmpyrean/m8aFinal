@@ -21,32 +21,10 @@ exports.createUser = async (req, res) => {
     }
 };
 
-exports.getAllUsers = async (req, res) => {
-    try {
-        // Get all users
-        const users = await User.find();
-
-        // Configure response to sucessful request
-        res.status(200).json({
-            status: 'success',
-            results: users.length,
-            data: {
-                users
-            }
-        });
-    } catch (err) {
-        // Configure response to failed request
-        res.status(400).json({
-            status: 'fail',
-            message: err
-        });
-    }
-};
-
 exports.getUserByEmail = async (req, res) => {
     // Get user email from url
     const urlEmail = req.url.replace('/', '');
-    
+
     try {
         // Look up user by their email address
         const user = await User.findOne( {email: urlEmail} );
