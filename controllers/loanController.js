@@ -1,15 +1,15 @@
-const User = require('../models/User');
+const Loan = require('../models/Loan');
 
-exports.createUser = async (req, res) => {
+exports.createLoan = async (req, res) => {
     try {
-        // Create and persist new user
-        const newUser = await (new User(req.body)).save();
+        // Create and persist new loan
+        const newLoan = await (new Loan(req.body)).save();
         
         // Configure response to successful request
         res.status(201).json({
             status: 'success',
             data: {
-                user: newUser
+                loan: newLoan
             }
         });
     } catch (err) {
@@ -21,31 +21,18 @@ exports.createUser = async (req, res) => {
     }
 };
 
-exports.getUserByEmail = async (req, res) => {
-    // Get user email from url
-    const urlEmail = req.url.replace('/', '');
-
+exports.getAllLoans = async (req, res) => {
     try {
-        // Look up user by their email address
-        const user = await User.findOne( {email: urlEmail} );
-  
-        // Respond based on if user existed
-        user ?
-            // Found
-            res.status(200).json({
-                status: 'success',
-                data: {
-                    user
-                }
-            }) :
-            // Not found
-            res.status(404).json({
-                status: 'fail',
-                message: `${urlEmail} not found`,
-                data: {
-                    user : null
-                }
-            });
+        // Create and persist new loan
+        const loans = await Loan.find();
+        
+        // Configure response to successful request
+        res.status(200).json({
+            status: 'success',
+            data: {
+                loans
+            }
+        });
     } catch (err) {
         // Configure response to failed request
         res.status(400).json({
@@ -55,16 +42,45 @@ exports.getUserByEmail = async (req, res) => {
     }
 };
 
-exports.updateUserByEmail = async (req, res) => {
-    // Get user email from url
-    const urlEmail = req.url.replace('/', '');
+exports.getLoanById = async (req, res) => {
+    try {
+        // Get loan
+        const loan = await Loan.findById(req.params.id);
+
+        // Respond based on if loan existed
+        loan ?
+            // Found
+            res.status(200).json({
+                status: 'success',
+                data: {
+                    loan
+                }
+            }) :
+            // Not found
+            res.status(404).json({
+                status: 'fail',
+                message: `loan not found`,
+                data: {
+                    loan : null
+                }
+            });
+    } catch (err) {
+        // Configure response to failed request
+        res.status(400).json({
+            status: 'fail',
+            message: err
+        });        
+    }
+};
+
+exports.updateLoanById = async (req, res) => {
     // Update modified date
     req.body.modifiedDate = Date.now();
 
     try {
-        // Find user by email and update key-value pairs in the request body
-        const user = await User.findOneAndUpdate( 
-            { email: urlEmail }, 
+        // Find user by id and update key-value pairs in the request body
+        const loan = await Loan.findOneAndUpdate( 
+            req.params.id, 
             req.body, 
             {
                 new: true,
@@ -72,12 +88,12 @@ exports.updateUserByEmail = async (req, res) => {
             });
 
         // Respond based on if user existed
-        user ?
+        loan ?
             // Found
             res.status(200).json({
                 status: 'success',
                 data: {
-                    user
+                    loan
                 }
             }) :
             // Not found
@@ -85,7 +101,7 @@ exports.updateUserByEmail = async (req, res) => {
                 status: 'fail',
                 message: `${urlEmail} not found`,
                 data: {
-                    user : null
+                    loan : null
                 }
             });
     } catch (err) {
@@ -97,27 +113,28 @@ exports.updateUserByEmail = async (req, res) => {
     }
 };
 
-exports.deleteUserByEmail = async (req, res) => {
-    // Get user email from url
-    const urlEmail = req.url.replace('/', '');
+exports.deleteLoanById = async (req, res) => {
     // Update modified date
     req.body.modifiedDate = Date.now();
 
     try {
         // Find user by email and delete
-        const user = await User.findOneAndDelete({ email: urlEmail });  
+        const loan = await Loan.findOneAndDelete(req.params.id);  
 
         // Respond based on if user existed
-        user ?
+        loan ?
             // Found
             res.status(204).send() :
             // Not found
             res.status(404).json({
                 status: 'fail',
-                message: `${urlEmail} not found`
+                message: `loan not found`
             });
     } catch (err) {
         // Configure response to failed request
-        res.status(400).json({ status: 'fail', message: err });
+        res.status(400).json({ 
+            status: 'fail', 
+            message: err 
+        });
     }
 };
