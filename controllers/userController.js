@@ -2,10 +2,10 @@ const User = require('../models/User');
 
 exports.createUser = async (req, res) => {
     try {
-        // create and persist new user
+        // Create and persist new user
         const newUser = await (new User(req.body)).save();
         
-        // configure response to successful request
+        // Configure response to successful request
         res.status(201).json({
             status: 'success',
             data: {
@@ -13,7 +13,7 @@ exports.createUser = async (req, res) => {
             }
         });
     } catch (err) {
-        // configure response to failed request
+        // Configure response to failed request
         res.status(400).json({
             status: 'fail',
             message: err
@@ -23,10 +23,10 @@ exports.createUser = async (req, res) => {
 
 exports.getAllUsers = async (req, res) => {
     try {
-        // get all users
+        // Get all users
         const users = await User.find();
 
-        // configure response to sucessful request
+        // Configure response to sucessful request
         res.status(200).json({
             status: 'success',
             results: users.length,
@@ -35,7 +35,7 @@ exports.getAllUsers = async (req, res) => {
             }
         });
     } catch (err) {
-        // configure response to failed request
+        // Configure response to failed request
         res.status(400).json({
             status: 'fail',
             message: err
@@ -44,32 +44,32 @@ exports.getAllUsers = async (req, res) => {
 };
 
 exports.getUserByEmail = async (req, res) => {
+    // Get user email from url
+    const urlEmail = req.url.replace('/', '');
+    
     try {
-        // get user email from url
-        const urlEmail = req.url.replace('/', '');
-
-        // look up user by their email address
+        // Look up user by their email address
         const user = await User.findOne( {email: urlEmail} );
   
-        // configure response to sucessful request
+        // Respond based on if user existed
         user ?
-        // found
-        res.status(200).json({
-            status: 'success',
-            data: {
-                user
-            }
-        }) :
-        // not found
-        res.status(404).json({
-            status: 'fail',
-            message: `${urlEmail} not found`,
-            data: {
-                user : null
-            }
-        });
+            // Found
+            res.status(200).json({
+                status: 'success',
+                data: {
+                    user
+                }
+            }) :
+            // Not found
+            res.status(404).json({
+                status: 'fail',
+                message: `${urlEmail} not found`,
+                data: {
+                    user : null
+                }
+            });
     } catch (err) {
-        // configure response to failed request
+        // Configure response to failed request
         res.status(400).json({
             status: 'fail',
             message: err
@@ -77,44 +77,69 @@ exports.getUserByEmail = async (req, res) => {
     }
 };
 
-exports.updateUserbyEmail = async (req, res) => {
-    // get user email from url
+exports.updateUserByEmail = async (req, res) => {
+    // Get user email from url
     const urlEmail = req.url.replace('/', '');
-    // update modified date
+    // Update modified date
     req.body.modifiedDate = Date.now();
 
     try {
-        // find user by email and update key-value pairs in the request body
+        // Find user by email and update key-value pairs in the request body
         const user = await User.findOneAndUpdate( 
-            { email: req.url.replace('/', '') }, 
+            { email: urlEmail }, 
             req.body, 
             {
                 new: true,
                 runValidators: true
-            }
-        );  
-        // configure response to sucessful request
+            });
+
+        // Respond based on if user existed
         user ?
-        // found
-        res.status(200).json({
-            status: 'success',
-            data: {
-                user
-            }
-        }) :
-        // not found
-        res.status(404).json({
-            status: 'fail',
-            message: `${urlEmail} not found`,
-            data: {
-                user : null
-            }
-        });
+            // Found
+            res.status(200).json({
+                status: 'success',
+                data: {
+                    user
+                }
+            }) :
+            // Not found
+            res.status(404).json({
+                status: 'fail',
+                message: `${urlEmail} not found`,
+                data: {
+                    user : null
+                }
+            });
     } catch (err) {
-        // configure response to failed request
+        // Configure response to failed request
         res.status(400).json({
             status: 'fail',
             message: err
         });
     }
 };
+
+exports.deleteUserByEmail = async (req, res) => {
+    // Get user email from url
+    const urlEmail = req.url.replace('/', '');
+    // Update modified date
+    req.body.modifiedDate = Date.now();
+
+    try {
+        // Find user by email and delete
+        const user = await User.findOneAndDelete({ email: urlEmail });  
+
+        // Respond based on if user existed
+        user ?
+            // Found
+            res.status(204).send() :
+            // Not found
+            res.status(404).json({
+                status: 'fail',
+                message: `${urlEmail} not found`
+            });
+    } catch (err) {
+        // Configure response to failed request
+        res.status(400).json({ status: 'fail', message: err });
+    }
+  };
