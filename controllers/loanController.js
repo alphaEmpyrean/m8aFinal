@@ -72,3 +72,43 @@ exports.getLoanById = async (req, res) => {
         });        
     }
 };
+
+exports.updateLoanById = async (req, res) => {
+    // Update modified date
+    req.body.modifiedDate = Date.now();
+
+    try {
+        // Find user by id and update key-value pairs in the request body
+        const loan = await Loan.findOneAndUpdate( 
+            req.params.id, 
+            req.body, 
+            {
+                new: true,
+                runValidators: true
+            });
+
+        // Respond based on if user existed
+        loan ?
+            // Found
+            res.status(200).json({
+                status: 'success',
+                data: {
+                    loan
+                }
+            }) :
+            // Not found
+            res.status(404).json({
+                status: 'fail',
+                message: `${urlEmail} not found`,
+                data: {
+                    loan : null
+                }
+            });
+    } catch (err) {
+        // Configure response to failed request
+        res.status(400).json({
+            status: 'fail',
+            message: err
+        });
+    }
+};

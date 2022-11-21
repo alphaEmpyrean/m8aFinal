@@ -12,7 +12,8 @@ router
 
 router
     .route('/:id')
-    .get(loanController.getLoanById);
-    
+    .get(loanController.getLoanById)
+    .patch(loanController.updateLoanById);
+
 // Make app instance avaliable for import
 module.exports = router;
