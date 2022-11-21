@@ -112,3 +112,29 @@ exports.updateLoanById = async (req, res) => {
         });
     }
 };
+
+exports.deleteLoanById = async (req, res) => {
+    // Update modified date
+    req.body.modifiedDate = Date.now();
+
+    try {
+        // Find user by email and delete
+        const loan = await Loan.findOneAndDelete(req.params.id);  
+
+        // Respond based on if user existed
+        loan ?
+            // Found
+            res.status(204).send() :
+            // Not found
+            res.status(404).json({
+                status: 'fail',
+                message: `loan not found`
+            });
+    } catch (err) {
+        // Configure response to failed request
+        res.status(400).json({ 
+            status: 'fail', 
+            message: err 
+        });
+    }
+};
