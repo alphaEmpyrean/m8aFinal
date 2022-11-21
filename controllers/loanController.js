@@ -40,5 +40,35 @@ exports.getAllLoans = async (req, res) => {
             message: err
         });
     }
+};
 
+exports.getLoanById = async (req, res) => {
+    try {
+        // Get loan
+        const loan = await Loan.findById(req.params.id);
+
+        // Respond based on if loan existed
+        loan ?
+            // Found
+            res.status(200).json({
+                status: 'success',
+                data: {
+                    loan
+                }
+            }) :
+            // Not found
+            res.status(404).json({
+                status: 'fail',
+                message: `loan not found`,
+                data: {
+                    loan : null
+                }
+            });
+    } catch (err) {
+        // Configure response to failed request
+        res.status(400).json({
+            status: 'fail',
+            message: err
+        });        
+    }
 };

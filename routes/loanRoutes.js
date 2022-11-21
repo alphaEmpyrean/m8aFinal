@@ -10,5 +10,9 @@ router
     .get(loanController.getAllLoans)
     .post(loanController.createLoan);
 
+router
+    .route('/:id')
+    .get(loanController.getLoanById);
+    
 // Make app instance avaliable for import
 module.exports = router;
