@@ -1,9 +1,13 @@
 const User = require('../models/User');
+const bcrypt = require('bcryptjs');
 
 exports.createUser = async (req, res) => {
     try {
         // Create and persist new user
-        const newUser = await (new User(req.body)).save();
+        var newUser = new User(req.body);
+        newUser.passwordHash = bcrypt.hashSync(req.body.password, 10);
+        newUser = (await newUser.save()).toJSON();
+        delete newUser.passwordHash;
         
         // Configure response to successful request
         res.status(201).json({
@@ -27,17 +31,22 @@ exports.getUserByEmail = async (req, res) => {
 
     try {
         // Look up user by their email address
-        const user = await User.findOne( {email: urlEmail} );
-  
+        var user = await User.findOne( {email: urlEmail} );
+        
         // Respond based on if user existed
-        user ?
+        if (user) {
             // Found
+            // Remove password hasf from object
+            user = user.toJSON();
+            delete user.passwordHash;
+
             res.status(200).json({
                 status: 'success',
                 data: {
                     user
                 }
-            }) :
+            })
+        } else {
             // Not found
             res.status(404).json({
                 status: 'fail',
@@ -46,6 +55,7 @@ exports.getUserByEmail = async (req, res) => {
                     user : null
                 }
             });
+        }
     } catch (err) {
         // Configure response to failed request
         res.status(400).json({
