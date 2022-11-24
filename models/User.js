@@ -9,6 +9,7 @@ const schemaUser = new mongoose.Schema({
     lastName: String
   },
   email: String,
+  passwordHash: String,
   dateOfBirth: Date,
   createdDate: { type: Date, default: Date.now },
   modifiedDate: { type: Date, default: Date.now },
