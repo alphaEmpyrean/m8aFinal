@@ -29,7 +29,7 @@ app.use(express.json()); // parse json in request bodies
 app.use(morgan('dev')); // log requests to console
 
 // ******** routes ********
-app.use('/api/v1/users', userRouter);
+app.use('/api/v1/users', authenticate, userRouter);
 app.use('/api/v1/loans', authenticate, loanRouter);
 app.use('/api/v1/auth', authRouter);
 
