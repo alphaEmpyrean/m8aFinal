@@ -1,0 +1,53 @@
+doctype html
+html
+  head
+    block head
+      meta(charset='UTF-8')
+      meta(name='viewport' content='width=device-width, initial-scale=1.0')
+      link(rel='stylesheet' href='/css/style.css')
+      link(rel='shortcut icon' type='image/png' href='/img/favicon.png')
+      link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Lato:300,300i,700')
+      title New Loan
+
+  body
+    // DARK BLUE HEADER
+    include _header
+
+    //CONTENT
+    block content
+      main.main
+        .card-container
+          .card
+            .card__header
+              h3.heading-tertirary
+                span New Loan
+            .card__details
+              .card__data
+                svg.card__icon
+                  use(xlink:href='img/icons.svg#icon-map-pin')
+                form(target='dummyframe' action='/api/v1/loans' method='post')
+                  label(for='userId') User Id:
+                  input#userId(type='text' name='userId')
+                  br
+                  br
+                  label(for='loanType') Loan Type:
+                  input#loanType(type='text' name='loanType')
+                  br
+                  br
+                  label(for='amount') Amount:
+                  input#amount(type='number' name='amount')
+                  br
+                  br
+                  label(for='interestRate') Rate:
+                  input#interestRate(type='number' step='any' name='interestRate')
+                  br
+                  br
+                  label(for='loanTerm') Loan Term:
+                  input#cpassword(type='number' name='loanTerm')
+                  br
+                  br
+                  input#submitBtn.card__sub-heading(type='submit' onclick='window.location.href="/loans"' value='Submit')
+      iframe#dummyframe(name='dummyframe' style='display: none;')
+
+    //FOOTER
+    include _footer

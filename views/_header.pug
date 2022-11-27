@@ -1,0 +1,20 @@
+<!-- HEADER -->
+header.header
+  nav.nav.nav--loans
+    a.nav__el(href='/loans') All Loans
+    form.nav__search
+      button.nav__search-btn
+        svg
+          use(xlink:href='img/icons.svg#searchIcon')
+      input.nav__search-input(type='text' placeholder='Search loans')
+  .header__logo
+    img(src='img/logo.png' alt='Loan logo')
+  nav.nav.nav--user
+    a.nav__el(href='#') My Loans
+    button.nav__el Log out
+      a.nav__el(href='#')
+    img.nav__user-img(src='img/users/user.png' alt='User photo') 
+    h3.heading-primary
+      | Loanee
+
+      

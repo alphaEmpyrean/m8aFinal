@@ -5,6 +5,8 @@ exports.createUser = async (req, res) => {
     try {
         // Create and persist new user
         var newUser = new User(req.body);
+        newUser.name.firstName = req.body.fname; // need to manually set names
+        newUser.name.lastName = req.body.lname;  // because theyre a nested object
         newUser.passwordHash = bcrypt.hashSync(req.body.password, 10);
         newUser = (await newUser.save()).toJSON();
         delete newUser.passwordHash;

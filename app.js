@@ -3,9 +3,11 @@ const morgan = require('morgan');
 const userRouter = require('./routes/userRoutes');
 const loanRouter = require('./routes/loanRoutes');
 const authRouter = require('./routes/authRoutes');
+const viewRouter = require('./routes/viewRoutes');
 const {authenticate} = require('./controllers/authController');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
+const path = require('path');
 
 // Instantiate an application instance
 const app = express();
@@ -27,10 +29,19 @@ mongoose.connect(process.env.MONGODB_CLUSTER_URI
 // ******** middleware ********
 app.use(express.json()); // parse json in request bodies
 app.use(morgan('dev')); // log requests to console
+app.set('view engine', 'pug'); // Pug templating engine
+app.set('views', path.join(__dirname, 'views'));
+app.use(express.static( // Set static content location
+    `${__dirname}/public`
+));
+app.use(express.urlencoded({ // convert xxx-urlencoded body to json
+    extended: true
+}))
 
 // ******** routes ********
 app.use('/api/v1/users', authenticate, userRouter);
 app.use('/api/v1/loans', authenticate, loanRouter);
 app.use('/api/v1/auth', authRouter);
+app.use('/', viewRouter);
 
 module.exports = app;

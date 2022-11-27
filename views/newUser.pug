@@ -1,0 +1,49 @@
+doctype html
+html
+  head
+    block head
+      meta(charset='UTF-8')
+      meta(name='viewport' content='width=device-width, initial-scale=1.0')
+      link(rel='stylesheet' href='/css/style.css')
+      link(rel='shortcut icon' type='image/png' href='/img/favicon.png')
+      link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Lato:300,300i,700')
+      title New User
+
+  body
+    // DARK BLUE HEADER
+    include _header
+
+    //CONTENT
+    block content
+      main.main
+        .card-container
+          .card
+            .card__header
+              h3.heading-tertirary
+                span New User
+            .card__details
+              .card__data
+                svg.card__icon
+                  use(xlink:href='img/icons.svg#icon-map-pin')
+                form(target='dummyframe' action='/api/v1/auth/register' method='post')
+                  label(for='fname') First name:
+                  input#fname(type='text' name='fname')
+                  br
+                  br
+                  label(for='lname') Last name:
+                  input#lname(type='text' name='lname')
+                  br
+                  br
+                  label(for='email') Email:
+                  input#email(type='email' name='email')
+                  br
+                  br
+                  label(for='password') Password:
+                  input#password(type='password' name='password')
+                  br
+                  br
+                  input#submitBtn.card__sub-heading(type='submit' onclick='window.location.href="/login"' value='Submit')
+      iframe#dummyframe(name='dummyframe' style='display: none;')
+
+    //FOOTER
+    include _footer
